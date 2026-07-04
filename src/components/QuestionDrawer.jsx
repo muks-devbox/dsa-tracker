@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { X, Plus } from 'lucide-react';
 import { PLATFORMS, PRESET_TAGS } from '@/lib/constants';
 import { CONFIDENCE_LABELS, getToday } from '@/lib/srs';
+import MarkdownEditorField from '@/components/MarkdownEditorField';
 
 const emptyForm = {
   name: '',
@@ -188,23 +189,20 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
             </Field>
           </div>
 
-          <Field label="Approach / Logic">
-            <textarea
-              rows={4}
-              value={form.approach}
-              onChange={(e) => setForm((f) => ({ ...f, approach: e.target.value }))}
-              className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-primary/40"
-            />
-          </Field>
+          <MarkdownEditorField
+            label="Approach / Logic"
+            value={form.approach}
+            onChange={(v) => setForm((f) => ({ ...f, approach: v }))}
+            placeholder="Click to write your solution notes..."
+          />
 
-          <Field label="Mistakes / Watch-outs">
-            <textarea
-              rows={4}
-              value={form.mistakeNotes}
-              onChange={(e) => setForm((f) => ({ ...f, mistakeNotes: e.target.value }))}
-              className="w-full bg-background border border-destructive/40 rounded-md px-3 py-2 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-destructive/30"
-            />
-          </Field>
+          <MarkdownEditorField
+            label="Mistakes / Watch-outs"
+            value={form.mistakeNotes}
+            onChange={(v) => setForm((f) => ({ ...f, mistakeNotes: v }))}
+            placeholder="Click to note what went wrong..."
+            destructive
+          />
 
           <div className="flex gap-3 pt-2">
             <button

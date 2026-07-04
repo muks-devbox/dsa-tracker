@@ -13,7 +13,7 @@ export default function Login() {
           </div>
         </div>
         <h1 className="font-display text-2xl font-extrabold text-primary mb-1 tracking-tight">
-          DSA Tracker
+          DSA Rev Tracker
         </h1>
         <p className="text-muted-foreground text-sm mb-8">
           Spaced Repetition Tracker

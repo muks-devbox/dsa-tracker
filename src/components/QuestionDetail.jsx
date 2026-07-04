@@ -1,5 +1,6 @@
 import { X, Pencil, CheckCircle2 } from 'lucide-react';
 import { getNextRevisionDate, isDue, confidenceColorClass, CONFIDENCE_LABELS } from '@/lib/srs';
+import { renderMarkdownLite } from '@/lib/markdown';
 
 export default function QuestionDetail({ open, question, onClose, onEdit, onMarkRevised }) {
   if (!open || !question) return null;
@@ -100,12 +101,13 @@ function Section({ label, content, highlight = false }) {
         {label}
       </div>
       <div
-        className={`text-sm whitespace-pre-wrap rounded-md border p-3 min-h-[3rem] ${
-          highlight ? 'border-destructive/30 bg-destructive/5' : 'border-border bg-background'
+        className={`text-sm rounded-md border p-3 min-h-[3rem] md-content ${
+          highlight ? 'border-destructive/30 bg-destructive/5 md-destructive' : 'border-border bg-background'
         } ${!content ? 'text-muted-foreground italic' : ''}`}
-      >
-        {content || 'Nothing noted.'}
-      </div>
+        dangerouslySetInnerHTML={{
+          __html: content ? renderMarkdownLite(content) : 'Nothing noted.',
+        }}
+      />
     </div>
   );
 }

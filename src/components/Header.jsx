@@ -8,7 +8,7 @@ export default function Header({ onAdd, onExport, exportDisabled }) {
     <div className="flex items-start justify-between mb-6 gap-4 flex-wrap">
       <div>
         <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-primary tracking-tight">
-         DSA Tracker
+          DSA Rev Tracker
         </h1>
         <p className="text-muted-foreground text-sm mt-1">
           Spaced Repetition Tracker
