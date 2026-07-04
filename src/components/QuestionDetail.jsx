@@ -9,39 +9,37 @@ export default function QuestionDetail({ open, question, onClose, onEdit, onMark
   const nextDate = getNextRevisionDate(question.lastRevised, question.confidence);
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
-      <div className="absolute inset-0 bg-black/30" onClick={onClose} />
-      <div className="relative w-full max-w-md bg-card h-full overflow-y-auto p-6 shadow-xl">
-        <div className="flex justify-between items-start mb-4 gap-3">
-          <div>
-            <h2 className="font-semibold text-xl leading-tight">{question.name}</h2>
-            <p className="text-muted-foreground text-sm mt-0.5">{question.platform}</p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative bg-card border border-border rounded-md w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-xl p-8">
+        <button
+          onClick={onClose}
+          className="absolute top-5 right-5 text-muted-foreground hover:text-foreground"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        <h2 className="font-display text-2xl font-extrabold text-primary tracking-tight pr-8">
+          {question.name}
+        </h2>
+        <p className="font-mono text-sm text-muted-foreground mt-1.5">
+          {question.platform} • Level {question.confidence} —{' '}
+          <span className={confidenceColorClass(question.confidence)}>
+            {CONFIDENCE_LABELS[question.confidence]}
+          </span>
+        </p>
+
+        {(question.tags || []).length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-4">
+            {question.tags.map((t) => (
+              <span key={t} className="border border-border px-2 py-0.5 rounded-md text-xs">
+                {t}
+              </span>
+            ))}
           </div>
-          <button onClick={onClose} className="text-muted-foreground hover:text-foreground shrink-0">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+        )}
 
-        <div className="flex flex-wrap gap-1.5 mb-5">
-          {(question.tags || []).map((t) => (
-            <span key={t} className="border border-border px-2 py-0.5 rounded-md text-xs">
-              {t}
-            </span>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 mb-5">
-          <InfoBlock label="Confidence">
-            <span className={`font-mono font-bold text-lg ${confidenceColorClass(question.confidence)}`}>
-              Lv {question.confidence}
-            </span>
-            <span className="text-muted-foreground text-xs ml-1.5">
-              {CONFIDENCE_LABELS[question.confidence]}
-            </span>
-          </InfoBlock>
-          <InfoBlock label="Time Complexity">
-            <span className="font-mono text-sm">{question.timeComplexity || '—'}</span>
-          </InfoBlock>
+        <div className="flex flex-wrap gap-x-8 gap-y-3 mt-5 pb-5 border-b border-border">
           <InfoBlock label="Last Revised">
             <span className="font-mono text-sm">{question.lastRevised}</span>
           </InfoBlock>
@@ -57,10 +55,14 @@ export default function QuestionDetail({ open, question, onClose, onEdit, onMark
           </InfoBlock>
         </div>
 
-        <Section label="Approach / Logic" content={question.approach} />
-        <Section label="Mistakes / Watch-outs" content={question.mistakeNotes} highlight />
+        <Box label="Time Complexity" mono>
+          {question.timeComplexity || '—'}
+        </Box>
 
-        <div className="flex gap-3 mt-6">
+        <Section label="Approach" content={question.approach} />
+        <Section label="Mistakes / Notes" content={question.mistakeNotes} highlight />
+
+        <div className="flex gap-3 mt-2">
           <button
             onClick={() => onEdit(question)}
             className="flex-1 flex items-center justify-center gap-1.5 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] transition-colors"
@@ -94,9 +96,22 @@ function InfoBlock({ label, children }) {
   );
 }
 
+function Box({ label, children, mono = false }) {
+  return (
+    <div className="mt-5">
+      <div className="text-[11px] uppercase tracking-wide text-muted-foreground mb-1.5">
+        {label}
+      </div>
+      <div className={`text-sm rounded-md border border-border bg-background p-3 ${mono ? 'font-mono' : ''}`}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function Section({ label, content, highlight = false }) {
   return (
-    <div className="mb-5">
+    <div className="mt-5">
       <div className="text-[11px] uppercase tracking-wide text-muted-foreground mb-1.5">
         {label}
       </div>
