@@ -7,10 +7,12 @@ import MarkdownEditorField from '@/components/MarkdownEditorField';
 const emptyForm = {
   name: '',
   platform: 'LeetCode',
+  problemLink: '',
   tags: [],
   confidence: 3,
   lastRevised: getToday(),
   timeComplexity: '',
+  gist: '',
   approach: '',
   mistakeNotes: '',
 };
@@ -26,10 +28,12 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
           ? {
               name: editingQuestion.name || '',
               platform: editingQuestion.platform || 'LeetCode',
+              problemLink: editingQuestion.problemLink || '',
               tags: editingQuestion.tags || [],
               confidence: editingQuestion.confidence || 3,
               lastRevised: editingQuestion.lastRevised || getToday(),
               timeComplexity: editingQuestion.timeComplexity || '',
+              gist: editingQuestion.gist || '',
               approach: editingQuestion.approach || '',
               mistakeNotes: editingQuestion.mistakeNotes || '',
             }
@@ -83,6 +87,16 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
               value={form.name}
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
               className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+            />
+          </Field>
+
+          <Field label="Problem Link (optional)">
+            <input
+              type="url"
+              placeholder="https://leetcode.com/problems/..."
+              value={form.problemLink}
+              onChange={(e) => setForm((f) => ({ ...f, problemLink: e.target.value }))}
+              className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/40"
             />
           </Field>
 
@@ -168,6 +182,13 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
               )}
             </div>
           </Field>
+
+          <MarkdownEditorField
+            label="Problem Gist (in your own words)"
+            value={form.gist}
+            onChange={(v) => setForm((f) => ({ ...f, gist: v }))}
+            placeholder="Click to write a short summary of what the problem asks — 4-5 lines is plenty..."
+          />
 
           <div className="grid grid-cols-2 gap-3">
             <Field label="Time Complexity">

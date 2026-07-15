@@ -12,8 +12,10 @@ export function exportQuestionsToCSV(questions) {
   const headers = [
     'Name',
     'Platform',
+    'Problem Link',
     'Tags',
     'Confidence',
+    'Gist',
     'Last Revised',
     'Next Revision',
     'Time Complexity',
@@ -24,8 +26,10 @@ export function exportQuestionsToCSV(questions) {
   const rows = questions.map((q) => [
     q.name,
     q.platform,
+    q.problemLink,
     (q.tags || []).join(', '),
     q.confidence,
+    q.gist,
     q.lastRevised,
     getNextRevisionDate(q.lastRevised, q.confidence),
     q.timeComplexity,

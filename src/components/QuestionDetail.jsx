@@ -1,4 +1,4 @@
-import { X, Pencil, CheckCircle2 } from 'lucide-react';
+import { X, Pencil, CheckCircle2, ExternalLink } from 'lucide-react';
 import { getNextRevisionDate, isDue, confidenceColorClass, CONFIDENCE_LABELS } from '@/lib/srs';
 import { renderMarkdownLite } from '@/lib/markdown';
 
@@ -22,12 +22,24 @@ export default function QuestionDetail({ open, question, onClose, onEdit, onMark
         <h2 className="font-display text-2xl font-extrabold text-primary tracking-tight pr-8">
           {question.name}
         </h2>
-        <p className="font-mono text-sm text-muted-foreground mt-1.5">
-          {question.platform} • Level {question.confidence} —{' '}
-          <span className={confidenceColorClass(question.confidence)}>
-            {CONFIDENCE_LABELS[question.confidence]}
-          </span>
-        </p>
+        <div className="flex items-center flex-wrap gap-x-3 gap-y-1.5 mt-1.5">
+          <p className="font-mono text-sm text-muted-foreground">
+            {question.platform} • Level {question.confidence} —{' '}
+            <span className={confidenceColorClass(question.confidence)}>
+              {CONFIDENCE_LABELS[question.confidence]}
+            </span>
+          </p>
+          {question.problemLink && (
+            <a
+              href={question.problemLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+            >
+              View Problem <ExternalLink className="w-3 h-3" />
+            </a>
+          )}
+        </div>
 
         {(question.tags || []).length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-4">
@@ -36,6 +48,18 @@ export default function QuestionDetail({ open, question, onClose, onEdit, onMark
                 {t}
               </span>
             ))}
+          </div>
+        )}
+
+        {question.gist && (
+          <div className="mt-4 bg-primary/5 border border-primary/20 rounded-md p-3">
+            <div className="text-[11px] uppercase tracking-wide text-primary/80 mb-1.5 font-medium">
+              What's the problem asking?
+            </div>
+            <div
+              className="md-content text-sm"
+              dangerouslySetInnerHTML={{ __html: renderMarkdownLite(question.gist) }}
+            />
           </div>
         )}
 
