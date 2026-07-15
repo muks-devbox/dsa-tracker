@@ -1,8 +1,17 @@
 import { Fragment } from 'react';
-import { Pencil, Trash2, CheckCircle2 } from 'lucide-react';
+import { Pencil, Trash2, CheckCircle2, BookOpen, Book } from 'lucide-react';
 import { getNextRevisionDate, isDue, confidenceColorClass } from '@/lib/srs';
 
-export default function QuestionTable({ questions, groups, onView, onEdit, onDelete, onMarkRevised }) {
+export default function QuestionTable({
+  questions,
+  groups,
+  notesByTag,
+  onOpenNote,
+  onView,
+  onEdit,
+  onDelete,
+  onMarkRevised,
+}) {
   const renderRow = (q) => {
     const due = isDue(q.lastRevised, q.confidence);
     const nextDate = getNextRevisionDate(q.lastRevised, q.confidence);
@@ -94,11 +103,30 @@ export default function QuestionTable({ questions, groups, onView, onEdit, onDel
             ? groups.map((group, i) => (
                 <Fragment key={group.tag}>
                   <tr className={`bg-primary/15 ${i > 0 ? 'border-t-2 border-t-primary/30' : ''}`}>
-                    <td colSpan={5} className="px-5 py-3 text-xs font-bold uppercase tracking-wider text-primary">
-                      {group.tag}
-                      <span className="ml-2 font-normal normal-case text-muted-foreground">
-                        {group.items.length} problem{group.items.length !== 1 ? 's' : ''}
-                      </span>
+                    <td colSpan={5} className="px-5 py-3">
+                      <div className="flex items-center justify-between">
+                        <div className="text-xs font-bold uppercase tracking-wider text-primary">
+                          {group.tag}
+                          <span className="ml-2 font-normal normal-case text-muted-foreground">
+                            {group.items.length} problem{group.items.length !== 1 ? 's' : ''}
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => onOpenNote(group.tag)}
+                          title={notesByTag?.[group.tag] ? 'View pattern notes' : 'Add pattern notes'}
+                          className={`flex items-center justify-center p-1.5 rounded-md border transition-colors ${
+                            notesByTag?.[group.tag]
+                              ? 'border-primary/40 bg-primary/10 text-primary hover:bg-primary/20'
+                              : 'border-border text-muted-foreground hover:bg-black/[0.03]'
+                          }`}
+                        >
+                          {notesByTag?.[group.tag] ? (
+                            <Book className="w-3.5 h-3.5" />
+                          ) : (
+                            <BookOpen className="w-3.5 h-3.5" />
+                          )}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                   {group.items.map(renderRow)}

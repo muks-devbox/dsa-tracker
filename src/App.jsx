@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Layers, Clock } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useQuestions } from '@/hooks/useQuestions';
+import { useTopicNotes } from '@/hooks/useTopicNotes';
 import { isDue } from '@/lib/srs';
 import { exportQuestionsToCSV } from '@/lib/csv';
 import Login from '@/components/Login';
@@ -12,12 +13,14 @@ import QuestionTable from '@/components/QuestionTable';
 import QuestionCards from '@/components/QuestionCards';
 import QuestionDrawer from '@/components/QuestionDrawer';
 import QuestionDetail from '@/components/QuestionDetail';
+import TopicNoteModal from '@/components/TopicNoteModal';
 import DeleteDialog from '@/components/DeleteDialog';
 
 export default function App() {
   const { user, loading: authLoading } = useAuth();
   const { questions, addQuestion, updateQuestion, deleteQuestion, markRevised } =
     useQuestions();
+  const { notesByTag, saveTopicNote } = useTopicNotes();
 
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState({ platform: 'All', tag: 'All', confidence: 'All' });
@@ -26,6 +29,7 @@ export default function App() {
   const [editingQuestion, setEditingQuestion] = useState(null);
   const [deletingQuestion, setDeletingQuestion] = useState(null);
   const [viewingQuestion, setViewingQuestion] = useState(null);
+  const [viewingTopicNote, setViewingTopicNote] = useState(null);
 
   const filteredQuestions = useMemo(() => {
     return questions.filter((q) => {
@@ -169,6 +173,8 @@ export default function App() {
         <>
           <QuestionTable
             groups={groupedQuestions}
+            notesByTag={notesByTag}
+            onOpenNote={setViewingTopicNote}
             onView={setViewingQuestion}
             onEdit={openEditDrawer}
             onDelete={setDeletingQuestion}
@@ -176,6 +182,8 @@ export default function App() {
           />
           <QuestionCards
             groups={groupedQuestions}
+            notesByTag={notesByTag}
+            onOpenNote={setViewingTopicNote}
             onView={setViewingQuestion}
             onEdit={openEditDrawer}
             onDelete={setDeletingQuestion}
@@ -207,6 +215,15 @@ export default function App() {
         onClose={() => setViewingQuestion(null)}
         onEdit={openEditDrawer}
         onMarkRevised={markRevised}
+      />
+
+      <TopicNoteModal
+        open={!!viewingTopicNote}
+        tag={viewingTopicNote}
+        content={notesByTag[viewingTopicNote]?.content}
+        problemCount={groupedQuestions.find((g) => g.tag === viewingTopicNote)?.items.length || 0}
+        onClose={() => setViewingTopicNote(null)}
+        onSave={(value) => saveTopicNote(viewingTopicNote, value)}
       />
 
       <QuestionDrawer

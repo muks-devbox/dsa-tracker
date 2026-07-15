@@ -1,7 +1,16 @@
-import { Pencil, Trash2, CheckCircle2 } from 'lucide-react';
+import { Pencil, Trash2, CheckCircle2, BookOpen, Book } from 'lucide-react';
 import { getNextRevisionDate, isDue, confidenceColorClass } from '@/lib/srs';
 
-export default function QuestionCards({ questions, groups, onView, onEdit, onDelete, onMarkRevised }) {
+export default function QuestionCards({
+  questions,
+  groups,
+  notesByTag,
+  onOpenNote,
+  onView,
+  onEdit,
+  onDelete,
+  onMarkRevised,
+}) {
   const renderCard = (q) => {
     const due = isDue(q.lastRevised, q.confidence);
     const nextDate = getNextRevisionDate(q.lastRevised, q.confidence);
@@ -75,11 +84,28 @@ export default function QuestionCards({ questions, groups, onView, onEdit, onDel
       {groups
         ? groups.map((group, i) => (
             <div key={group.tag} className={i > 0 ? 'pt-2' : ''}>
-              <div className="bg-primary/15 rounded-md px-3 py-2.5 mb-3 text-xs font-bold uppercase tracking-wider text-primary">
-                {group.tag}
-                <span className="ml-2 font-normal normal-case text-muted-foreground">
-                  {group.items.length} problem{group.items.length !== 1 ? 's' : ''}
-                </span>
+              <div className="bg-primary/15 rounded-md px-3 py-2.5 mb-3 flex items-center justify-between gap-2">
+                <div className="text-xs font-bold uppercase tracking-wider text-primary">
+                  {group.tag}
+                  <span className="ml-2 font-normal normal-case text-muted-foreground">
+                    {group.items.length} problem{group.items.length !== 1 ? 's' : ''}
+                  </span>
+                </div>
+                <button
+                  onClick={() => onOpenNote(group.tag)}
+                  title={notesByTag?.[group.tag] ? 'View pattern notes' : 'Add pattern notes'}
+                  className={`flex items-center gap-1 text-xs font-medium normal-case px-2 py-1 rounded-md border shrink-0 transition-colors ${
+                    notesByTag?.[group.tag]
+                      ? 'border-primary/40 bg-primary/10 text-primary'
+                      : 'border-border text-muted-foreground'
+                  }`}
+                >
+                  {notesByTag?.[group.tag] ? (
+                    <Book className="w-3.5 h-3.5" />
+                  ) : (
+                    <BookOpen className="w-3.5 h-3.5" />
+                  )}
+                </button>
               </div>
               <div className="space-y-3">{group.items.map(renderCard)}</div>
             </div>
