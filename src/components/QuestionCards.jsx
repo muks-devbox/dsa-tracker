@@ -1,4 +1,4 @@
-import { Pencil, Trash2, CheckCircle2, BookOpen, Book } from 'lucide-react';
+import { Pencil, Trash2, CheckCircle2, BookOpen, Book, ChevronRight } from 'lucide-react';
 import { getNextRevisionDate, isDue, confidenceColorClass } from '@/lib/srs';
 
 export default function QuestionCards({
@@ -6,6 +6,8 @@ export default function QuestionCards({
   groups,
   notesByTag,
   onOpenNote,
+  collapsedGroups,
+  onToggleGroup,
   onView,
   onEdit,
   onDelete,
@@ -82,34 +84,55 @@ export default function QuestionCards({
   return (
     <div className="md:hidden space-y-3">
       {groups
-        ? groups.map((group, i) => (
-            <div key={group.tag} className={i > 0 ? 'pt-2' : ''}>
-              <div className="bg-primary/15 rounded-md px-3 py-2.5 mb-3 flex items-center justify-between gap-2">
-                <div className="text-xs font-bold uppercase tracking-wider text-primary">
-                  {group.tag}
-                  <span className="ml-2 font-normal normal-case text-muted-foreground">
-                    {group.items.length} problem{group.items.length !== 1 ? 's' : ''}
-                  </span>
-                </div>
-                <button
-                  onClick={() => onOpenNote(group.tag)}
-                  title={notesByTag?.[group.tag] ? 'View pattern notes' : 'Add pattern notes'}
-                  className={`flex items-center gap-1 text-xs font-medium normal-case px-2 py-1 rounded-md border shrink-0 transition-colors ${
-                    notesByTag?.[group.tag]
-                      ? 'border-primary/40 bg-primary/10 text-primary'
-                      : 'border-border text-muted-foreground'
+        ? groups.map((group, i) => {
+            const collapsed = collapsedGroups?.has(group.tag);
+            const dueCount = group.items.filter((q) => isDue(q.lastRevised, q.confidence)).length;
+            return (
+              <div key={group.tag} className={i > 0 ? 'pt-2' : ''}>
+                <div
+                  className={`rounded-md px-3 py-2.5 mb-3 flex items-center justify-between gap-2 ${
+                    collapsed && dueCount === 0 ? 'bg-black/[0.03]' : 'bg-primary/15'
                   }`}
                 >
-                  {notesByTag?.[group.tag] ? (
-                    <Book className="w-3.5 h-3.5" />
-                  ) : (
-                    <BookOpen className="w-3.5 h-3.5" />
-                  )}
-                </button>
+                  <button
+                    onClick={() => onToggleGroup(group.tag)}
+                    className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary flex-1 text-left min-w-0"
+                  >
+                    <ChevronRight
+                      className={`w-3.5 h-3.5 shrink-0 transition-transform ${
+                        collapsed ? '' : 'rotate-90'
+                      }`}
+                    />
+                    <span className="truncate">{group.tag}</span>
+                    <span className="font-normal normal-case text-muted-foreground shrink-0">
+                      {group.items.length}
+                    </span>
+                    {dueCount > 0 && (
+                      <span className="bg-primary text-primary-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-md normal-case animate-pulse shrink-0">
+                        {dueCount} due
+                      </span>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => onOpenNote(group.tag)}
+                    title={notesByTag?.[group.tag] ? 'View pattern notes' : 'Add pattern notes'}
+                    className={`flex items-center gap-1 text-xs font-medium normal-case px-2 py-1 rounded-md border shrink-0 transition-colors ${
+                      notesByTag?.[group.tag]
+                        ? 'border-primary/40 bg-primary/10 text-primary'
+                        : 'border-border text-muted-foreground'
+                    }`}
+                  >
+                    {notesByTag?.[group.tag] ? (
+                      <Book className="w-3.5 h-3.5" />
+                    ) : (
+                      <BookOpen className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                </div>
+                {!collapsed && <div className="space-y-3">{group.items.map(renderCard)}</div>}
               </div>
-              <div className="space-y-3">{group.items.map(renderCard)}</div>
-            </div>
-          ))
+            );
+          })
         : questions.map(renderCard)}
     </div>
   );

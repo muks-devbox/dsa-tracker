@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Boxes, AlertCircle, Flame, Target, Clock } from 'lucide-react';
 import { isDue } from '@/lib/srs';
 
-export default function StatsBar({ questions }) {
+export default function StatsBar({ questions, onDueTodayClick }) {
   const stats = useMemo(() => {
     const total = questions.length;
     const weakQuestions = questions.filter((q) => q.confidence <= 2);
@@ -43,17 +43,21 @@ export default function StatsBar({ questions }) {
         value={stats.dueToday}
         iconColor="text-primary"
         highlight
+        onClick={stats.dueToday > 0 ? onDueTodayClick : undefined}
       />
     </div>
   );
 }
 
-function StatCard({ icon: Icon, label, value, iconColor, className = '', valueClassName = '', highlight = false }) {
+function StatCard({ icon: Icon, label, value, iconColor, className = '', valueClassName = '', highlight = false, onClick }) {
+  const clickable = typeof onClick === 'function';
   return (
     <div
+      onClick={onClick}
+      title={clickable ? 'Jump to due topics' : undefined}
       className={`border border-border rounded-md p-4 ${
         highlight ? 'bg-primary/10 border-primary/20' : 'bg-card'
-      } ${className}`}
+      } ${clickable ? 'cursor-pointer hover:border-primary/40 hover:bg-primary/15 transition-colors' : ''} ${className}`}
     >
       <div className="flex items-center gap-1.5 mb-2">
         <Icon className={`w-4 h-4 ${iconColor}`} />

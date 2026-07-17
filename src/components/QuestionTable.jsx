@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Pencil, Trash2, CheckCircle2, BookOpen, Book } from 'lucide-react';
+import { Pencil, Trash2, CheckCircle2, BookOpen, Book, ChevronRight } from 'lucide-react';
 import { getNextRevisionDate, isDue, confidenceColorClass } from '@/lib/srs';
 
 export default function QuestionTable({
@@ -7,6 +7,8 @@ export default function QuestionTable({
   groups,
   notesByTag,
   onOpenNote,
+  collapsedGroups,
+  onToggleGroup,
   onView,
   onEdit,
   onDelete,
@@ -100,38 +102,59 @@ export default function QuestionTable({
         </thead>
         <tbody>
           {groups
-            ? groups.map((group, i) => (
-                <Fragment key={group.tag}>
-                  <tr className={`bg-primary/15 ${i > 0 ? 'border-t-2 border-t-primary/30' : ''}`}>
-                    <td colSpan={5} className="px-5 py-3">
-                      <div className="flex items-center justify-between">
-                        <div className="text-xs font-bold uppercase tracking-wider text-primary">
-                          {group.tag}
-                          <span className="ml-2 font-normal normal-case text-muted-foreground">
-                            {group.items.length} problem{group.items.length !== 1 ? 's' : ''}
-                          </span>
+            ? groups.map((group, i) => {
+                const collapsed = collapsedGroups?.has(group.tag);
+                const dueCount = group.items.filter((q) => isDue(q.lastRevised, q.confidence)).length;
+                return (
+                  <Fragment key={group.tag}>
+                    <tr
+                      className={`${
+                        collapsed && dueCount === 0 ? 'bg-black/[0.02]' : 'bg-primary/15'
+                      } ${i > 0 ? 'border-t border-border' : ''}`}
+                    >
+                      <td colSpan={5} className="px-5 py-3">
+                        <div className="flex items-center justify-between">
+                          <button
+                            onClick={() => onToggleGroup(group.tag)}
+                            className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary flex-1 text-left"
+                          >
+                            <ChevronRight
+                              className={`w-3.5 h-3.5 shrink-0 transition-transform ${
+                                collapsed ? '' : 'rotate-90'
+                              }`}
+                            />
+                            {group.tag}
+                            <span className="font-normal normal-case text-muted-foreground">
+                              {group.items.length} problem{group.items.length !== 1 ? 's' : ''}
+                            </span>
+                            {dueCount > 0 && (
+                              <span className="bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-md normal-case animate-pulse">
+                                {dueCount} due
+                              </span>
+                            )}
+                          </button>
+                          <button
+                            onClick={() => onOpenNote(group.tag)}
+                            title={notesByTag?.[group.tag] ? 'View pattern notes' : 'Add pattern notes'}
+                            className={`flex items-center justify-center p-1.5 rounded-md border transition-colors shrink-0 ${
+                              notesByTag?.[group.tag]
+                                ? 'border-primary/40 bg-primary/10 text-primary hover:bg-primary/20'
+                                : 'border-border text-muted-foreground hover:bg-black/[0.03]'
+                            }`}
+                          >
+                            {notesByTag?.[group.tag] ? (
+                              <Book className="w-3.5 h-3.5" />
+                            ) : (
+                              <BookOpen className="w-3.5 h-3.5" />
+                            )}
+                          </button>
                         </div>
-                        <button
-                          onClick={() => onOpenNote(group.tag)}
-                          title={notesByTag?.[group.tag] ? 'View pattern notes' : 'Add pattern notes'}
-                          className={`flex items-center justify-center p-1.5 rounded-md border transition-colors ${
-                            notesByTag?.[group.tag]
-                              ? 'border-primary/40 bg-primary/10 text-primary hover:bg-primary/20'
-                              : 'border-border text-muted-foreground hover:bg-black/[0.03]'
-                          }`}
-                        >
-                          {notesByTag?.[group.tag] ? (
-                            <Book className="w-3.5 h-3.5" />
-                          ) : (
-                            <BookOpen className="w-3.5 h-3.5" />
-                          )}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  {group.items.map(renderRow)}
-                </Fragment>
-              ))
+                      </td>
+                    </tr>
+                    {!collapsed && group.items.map(renderRow)}
+                  </Fragment>
+                );
+              })
             : questions.map(renderRow)}
         </tbody>
       </table>
