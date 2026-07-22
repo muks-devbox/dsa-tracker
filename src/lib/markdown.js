@@ -88,6 +88,13 @@ export function renderMarkdownLite(raw) {
       continue;
     }
 
+    const hrMatch = trimmed.match(/^(-{3,}|\*{3,}|_{3,})$/);
+    if (hrMatch) {
+      flushAll();
+      output.push('<hr/>');
+      continue;
+    }
+
     const listMatch = line.match(/^\s*[-*]\s+(.*)$/);
     if (listMatch) {
       flushPara();
