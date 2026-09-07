@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { Pencil, Trash2, CheckCircle2, BookOpen, Book, ChevronRight } from 'lucide-react';
 import { getNextRevisionDate, isDue, confidenceColorClass } from '@/lib/srs';
+import { celebrateRevision } from '@/lib/confetti';
 
 export default function QuestionTable({
   questions,
@@ -66,7 +67,10 @@ export default function QuestionTable({
           </div>
           {due && (
             <button
-              onClick={() => onMarkRevised(q)}
+              onClick={(e) => {
+                celebrateRevision(e);
+                onMarkRevised(q);
+              }}
               className="mt-1.5 flex items-center gap-1 bg-primary/10 text-primary text-xs font-medium px-2.5 py-1 rounded-md hover:bg-primary/20 transition-colors"
             >
               <CheckCircle2 className="w-3.5 h-3.5" />

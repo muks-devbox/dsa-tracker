@@ -1,5 +1,6 @@
 import { Pencil, Trash2, CheckCircle2, BookOpen, Book, ChevronRight } from 'lucide-react';
 import { getNextRevisionDate, isDue, confidenceColorClass } from '@/lib/srs';
+import { celebrateRevision } from '@/lib/confetti';
 
 export default function QuestionCards({
   questions,
@@ -70,7 +71,10 @@ export default function QuestionCards({
 
         {due && (
           <button
-            onClick={() => onMarkRevised(q)}
+            onClick={(e) => {
+              celebrateRevision(e);
+              onMarkRevised(q);
+            }}
             className="mt-3 w-full flex items-center justify-center gap-1.5 bg-primary text-primary-foreground text-sm font-medium py-2 rounded-md hover:opacity-90 transition-opacity"
           >
             <CheckCircle2 className="w-4 h-4" />

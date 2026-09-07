@@ -1,6 +1,7 @@
 import { X, Pencil, CheckCircle2, ExternalLink } from 'lucide-react';
 import { getNextRevisionDate, isDue, confidenceColorClass, CONFIDENCE_LABELS } from '@/lib/srs';
 import { renderMarkdownLite } from '@/lib/markdown';
+import { celebrateRevision } from '@/lib/confetti';
 
 export default function QuestionDetail({ open, question, onClose, onEdit, onMarkRevised }) {
   if (!open || !question) return null;
@@ -96,7 +97,10 @@ export default function QuestionDetail({ open, question, onClose, onEdit, onMark
           </button>
           {due && (
             <button
-              onClick={() => onMarkRevised(question)}
+              onClick={(e) => {
+                celebrateRevision(e);
+                onMarkRevised(question);
+              }}
               className="flex-1 flex items-center justify-center gap-1.5 bg-primary text-primary-foreground py-2.5 rounded-md text-sm font-medium hover:opacity-90 transition-opacity"
             >
               <CheckCircle2 className="w-4 h-4" />
