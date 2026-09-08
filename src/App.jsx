@@ -176,7 +176,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background px-4 sm:px-6 lg:px-10 py-6 max-w-6xl mx-auto">
+    <div className="min-h-screen bg-background px-4 sm:px-6 lg:px-10 py-6 max-w-6xl mx-auto animate-page-in">
       <Header
         onAdd={openAddDrawer}
         onExport={() => exportQuestionsToCSV(questions)}

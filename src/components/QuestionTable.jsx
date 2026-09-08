@@ -15,14 +15,15 @@ export default function QuestionTable({
   onDelete,
   onMarkRevised,
 }) {
-  const renderRow = (q) => {
+  const renderRow = (q, idx = 0) => {
     const due = isDue(q.lastRevised, q.confidence);
     const nextDate = getNextRevisionDate(q.lastRevised, q.confidence);
     const tags = q.tags || [];
     return (
       <tr
         key={q.id}
-        className={`border-b border-border last:border-0 animate-row-in ${
+        style={{ animationDelay: `${Math.min(idx, 10) * 35}ms` }}
+        className={`border-b border-border last:border-0 animate-row-in hover:bg-black/[0.015] transition-colors ${
           due ? 'bg-primary/5' : q.confidence <= 2 ? 'bg-destructive/5' : ''
         }`}
       >
@@ -71,7 +72,7 @@ export default function QuestionTable({
                 celebrateRevision(e);
                 onMarkRevised(q);
               }}
-              className="mt-1.5 flex items-center gap-1 bg-primary/10 text-primary text-xs font-medium px-2.5 py-1 rounded-md hover:bg-primary/20 transition-colors"
+              className="mt-1.5 flex items-center gap-1 bg-primary/10 text-primary text-xs font-medium px-2.5 py-1 rounded-md hover:bg-primary/20 hover:scale-105 active:scale-95 transition-all"
             >
               <CheckCircle2 className="w-3.5 h-3.5" />
               Mark as Revised
@@ -80,10 +81,10 @@ export default function QuestionTable({
         </td>
         <td className="px-5 py-4">
           <div className="flex justify-end gap-3">
-            <button onClick={() => onEdit(q)} className="text-muted-foreground hover:text-foreground" title="Edit">
+            <button onClick={() => onEdit(q)} className="text-muted-foreground hover:text-foreground hover:scale-110 active:scale-95 transition-transform" title="Edit">
               <Pencil className="w-4 h-4" />
             </button>
-            <button onClick={() => onDelete(q)} className="text-muted-foreground hover:text-destructive" title="Delete">
+            <button onClick={() => onDelete(q)} className="text-muted-foreground hover:text-destructive hover:scale-110 active:scale-95 transition-transform" title="Delete">
               <Trash2 className="w-4 h-4" />
             </button>
           </div>
@@ -112,7 +113,7 @@ export default function QuestionTable({
                 return (
                   <Fragment key={group.tag}>
                     <tr
-                      className={`${
+                      className={`transition-colors duration-300 ${
                         collapsed && dueCount === 0 ? 'bg-black/[0.02]' : 'bg-primary/15'
                       } ${i > 0 ? 'border-t border-border' : ''}`}
                     >
@@ -120,7 +121,7 @@ export default function QuestionTable({
                         <div className="flex items-center justify-between">
                           <button
                             onClick={() => onToggleGroup(group.tag)}
-                            className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary flex-1 text-left"
+                            className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary flex-1 text-left hover:opacity-70 transition-opacity"
                           >
                             <ChevronRight
                               className={`w-3.5 h-3.5 shrink-0 transition-transform ${

@@ -14,14 +14,15 @@ export default function QuestionCards({
   onDelete,
   onMarkRevised,
 }) {
-  const renderCard = (q) => {
+  const renderCard = (q, idx = 0) => {
     const due = isDue(q.lastRevised, q.confidence);
     const nextDate = getNextRevisionDate(q.lastRevised, q.confidence);
     const tags = q.tags || [];
     return (
       <div
         key={q.id}
-        className={`border border-border rounded-md p-4 bg-card animate-row-in ${
+        style={{ animationDelay: `${Math.min(idx, 10) * 35}ms` }}
+        className={`border border-border rounded-md p-4 bg-card animate-row-in hover:-translate-y-0.5 hover:shadow-md transition-[transform,box-shadow] ${
           due ? 'bg-primary/5' : q.confidence <= 2 ? 'bg-destructive/5' : ''
         }`}
       >
@@ -31,10 +32,10 @@ export default function QuestionCards({
             <div className="text-muted-foreground text-xs">{q.platform}</div>
           </button>
           <div className="flex gap-3">
-            <button onClick={() => onEdit(q)} className="text-muted-foreground">
+            <button onClick={() => onEdit(q)} className="text-muted-foreground hover:text-foreground hover:scale-110 active:scale-95 transition-transform">
               <Pencil className="w-4 h-4" />
             </button>
-            <button onClick={() => onDelete(q)} className="text-muted-foreground">
+            <button onClick={() => onDelete(q)} className="text-muted-foreground hover:text-destructive hover:scale-110 active:scale-95 transition-transform">
               <Trash2 className="w-4 h-4" />
             </button>
           </div>
@@ -94,13 +95,13 @@ export default function QuestionCards({
             return (
               <div key={group.tag} className={i > 0 ? 'pt-2' : ''}>
                 <div
-                  className={`rounded-md px-3 py-2.5 mb-3 flex items-center justify-between gap-2 ${
+                  className={`rounded-md px-3 py-2.5 mb-3 flex items-center justify-between gap-2 transition-colors duration-300 ${
                     collapsed && dueCount === 0 ? 'bg-black/[0.03]' : 'bg-primary/15'
                   }`}
                 >
                   <button
                     onClick={() => onToggleGroup(group.tag)}
-                    className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary flex-1 text-left min-w-0"
+                    className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary flex-1 text-left min-w-0 active:opacity-60 transition-opacity"
                   >
                     <ChevronRight
                       className={`w-3.5 h-3.5 shrink-0 transition-transform ${

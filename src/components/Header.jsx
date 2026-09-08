@@ -18,14 +18,14 @@ export default function Header({ onAdd, onExport, exportDisabled }) {
         <button
           onClick={onExport}
           disabled={exportDisabled}
-          className="flex items-center gap-2 border border-border bg-card px-3 sm:px-4 py-2 rounded-md text-sm font-medium hover:bg-black/[0.02] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="flex items-center gap-2 border border-border bg-card px-3 sm:px-4 py-2 rounded-md text-sm font-medium hover:bg-black/[0.02] hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 transition-all"
         >
           <Download className="w-4 h-4" />
           <span className="hidden sm:inline">Export CSV</span>
         </button>
         <button
           onClick={onAdd}
-          className="flex items-center gap-2 bg-primary text-primary-foreground px-3 sm:px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 active:scale-[0.97] transition-all"
+          className="flex items-center gap-2 bg-primary text-primary-foreground px-3 sm:px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0 transition-all"
         >
           <Plus className="w-4 h-4" />
           <span className="hidden sm:inline">Add Entry</span>
