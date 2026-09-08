@@ -124,3 +124,46 @@ body {
   border-top: 1px solid var(--color-border);
   margin: 1rem 0;
 }
+
+/* Motion */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes drawerIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.animate-row-in {
+  animation: fadeSlideIn 0.25s ease-out both;
+}
+.animate-backdrop-in {
+  animation: backdropIn 0.15s ease-out both;
+}
+.animate-modal-in {
+  animation: modalIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-drawer-in {
+  animation: drawerIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-stat-in {
+  animation: fadeSlideIn 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

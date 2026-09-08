@@ -11,8 +11,8 @@ export default function QuestionDetail({ open, question, onClose, onEdit, onMark
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-card border border-border rounded-md w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-xl p-8">
+      <div className="absolute inset-0 bg-black/40 animate-backdrop-in" onClick={onClose} />
+      <div className="relative bg-card border border-border rounded-md w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-xl p-8 animate-modal-in">
         <button
           onClick={onClose}
           className="absolute top-5 right-5 text-muted-foreground hover:text-foreground"
@@ -90,7 +90,7 @@ export default function QuestionDetail({ open, question, onClose, onEdit, onMark
         <div className="flex gap-3 mt-2">
           <button
             onClick={() => onEdit(question)}
-            className="flex-1 flex items-center justify-center gap-1.5 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] active:scale-[0.98] transition-all"
           >
             <Pencil className="w-4 h-4" />
             Edit
@@ -101,7 +101,7 @@ export default function QuestionDetail({ open, question, onClose, onEdit, onMark
                 celebrateRevision(e);
                 onMarkRevised(question);
               }}
-              className="flex-1 flex items-center justify-center gap-1.5 bg-primary text-primary-foreground py-2.5 rounded-md text-sm font-medium hover:opacity-90 transition-opacity"
+              className="flex-1 flex items-center justify-center gap-1.5 bg-primary text-primary-foreground py-2.5 rounded-md text-sm font-medium hover:opacity-90 active:scale-[0.97] transition-all"
             >
               <CheckCircle2 className="w-4 h-4" />
               Mark as Revised

@@ -20,7 +20,7 @@ export default function Login() {
         </p>
         <button
           onClick={signIn}
-          className="w-full bg-primary text-primary-foreground font-medium py-2.5 rounded-md hover:opacity-90 transition-opacity"
+          className="w-full bg-primary text-primary-foreground font-medium py-2.5 rounded-md hover:opacity-90 active:scale-[0.97] transition-all"
         >
           Sign in with Google
         </button>

@@ -64,8 +64,8 @@ export default function TopicNoteModal({ open, tag, content, problemCount, onClo
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-card border border-border rounded-md w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-xl p-8">
+      <div className="absolute inset-0 bg-black/40 animate-backdrop-in" onClick={onClose} />
+      <div className="relative bg-card border border-border rounded-md w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-xl p-8 animate-modal-in">
         <button
           onClick={onClose}
           className="absolute top-5 right-5 text-muted-foreground hover:text-foreground"
@@ -97,7 +97,7 @@ export default function TopicNoteModal({ open, tag, content, problemCount, onClo
             </div>
             <button
               onClick={startEdit}
-              className="mt-6 w-full flex items-center justify-center gap-1.5 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] transition-colors"
+              className="mt-6 w-full flex items-center justify-center gap-1.5 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] active:scale-[0.98] transition-all"
             >
               <Pencil className="w-4 h-4" />
               {value ? 'Edit Pattern Notes' : 'Add Pattern Notes'}
@@ -128,14 +128,14 @@ export default function TopicNoteModal({ open, tag, content, problemCount, onClo
               <button
                 onClick={handleCancel}
                 disabled={saving}
-                className="flex-1 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] transition-colors disabled:opacity-50"
+                className="flex-1 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] active:scale-[0.98] transition-all disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="flex-1 bg-primary text-primary-foreground py-2.5 rounded-md text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-60"
+                className="flex-1 bg-primary text-primary-foreground py-2.5 rounded-md text-sm font-medium hover:opacity-90 active:scale-[0.97] transition-all disabled:opacity-60"
               >
                 {saving ? 'Saving...' : 'Save'}
               </button>

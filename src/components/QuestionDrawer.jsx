@@ -69,8 +69,8 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
-      <div className="absolute inset-0 bg-black/30" onClick={onClose} />
-      <div className="relative w-full max-w-md bg-card h-full overflow-y-auto p-6 shadow-xl">
+      <div className="absolute inset-0 bg-black/30 animate-backdrop-in" onClick={onClose} />
+      <div className="relative w-full max-w-md bg-card h-full overflow-y-auto p-6 shadow-xl animate-drawer-in">
         <div className="flex justify-between items-center mb-6">
           <h2 className="font-display text-xl font-bold text-primary tracking-tight">
             {editingQuestion ? 'Edit Entry' : 'New Entry'}
@@ -160,7 +160,7 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
                 <button
                   type="button"
                   onClick={addCustomTag}
-                  className="bg-primary text-primary-foreground px-3 rounded-md hover:opacity-90"
+                  className="bg-primary text-primary-foreground px-3 rounded-md hover:opacity-90 active:scale-[0.97] transition-transform"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
@@ -228,13 +228,13 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
           <div className="flex gap-3 pt-2">
             <button
               onClick={onClose}
-              className="flex-1 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] transition-colors"
+              className="flex-1 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] active:scale-[0.98] transition-all"
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
-              className="flex-1 bg-primary text-primary-foreground py-2.5 rounded-md text-sm font-medium hover:opacity-90 transition-opacity"
+              className="flex-1 bg-primary text-primary-foreground py-2.5 rounded-md text-sm font-medium hover:opacity-90 active:scale-[0.97] transition-all"
             >
               Save Record
             </button>

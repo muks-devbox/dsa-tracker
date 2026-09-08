@@ -22,7 +22,7 @@ export default function QuestionTable({
     return (
       <tr
         key={q.id}
-        className={`border-b border-border last:border-0 ${
+        className={`border-b border-border last:border-0 animate-row-in ${
           due ? 'bg-primary/5' : q.confidence <= 2 ? 'bg-destructive/5' : ''
         }`}
       >

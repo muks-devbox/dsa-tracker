@@ -26,9 +26,9 @@ export default function StatsBar({ questions, onDueTodayClick }) {
 
   return (
     <div className="grid grid-cols-3 md:grid-cols-5 gap-3 mb-6">
-      <StatCard icon={Boxes} label="Total" value={stats.total} iconColor="text-primary" />
-      <StatCard icon={AlertCircle} label="Weak" value={stats.weak} iconColor="text-destructive" />
-      <StatCard icon={Flame} label="Strong" value={stats.strong} iconColor="text-emerald-600" />
+      <StatCard icon={Boxes} label="Total" value={stats.total} iconColor="text-primary" delay={0} />
+      <StatCard icon={AlertCircle} label="Weak" value={stats.weak} iconColor="text-destructive" delay={40} />
+      <StatCard icon={Flame} label="Strong" value={stats.strong} iconColor="text-emerald-600" delay={80} />
       <StatCard
         icon={Target}
         label="Weak Topic"
@@ -36,6 +36,7 @@ export default function StatsBar({ questions, onDueTodayClick }) {
         iconColor="text-muted-foreground"
         className="hidden md:block"
         valueClassName="text-xl truncate"
+        delay={120}
       />
       <StatCard
         icon={Clock}
@@ -44,20 +45,22 @@ export default function StatsBar({ questions, onDueTodayClick }) {
         iconColor="text-primary"
         highlight
         onClick={stats.dueToday > 0 ? onDueTodayClick : undefined}
+        delay={160}
       />
     </div>
   );
 }
 
-function StatCard({ icon: Icon, label, value, iconColor, className = '', valueClassName = '', highlight = false, onClick }) {
+function StatCard({ icon: Icon, label, value, iconColor, className = '', valueClassName = '', highlight = false, onClick, delay = 0 }) {
   const clickable = typeof onClick === 'function';
   return (
     <div
       onClick={onClick}
       title={clickable ? 'Jump to due topics' : undefined}
-      className={`border border-border rounded-md p-4 ${
+      style={{ animationDelay: `${delay}ms` }}
+      className={`border border-border rounded-md p-4 animate-stat-in ${
         highlight ? 'bg-primary/10 border-primary/20' : 'bg-card'
-      } ${clickable ? 'cursor-pointer hover:border-primary/40 hover:bg-primary/15 transition-colors' : ''} ${className}`}
+      } ${clickable ? 'cursor-pointer hover:border-primary/40 hover:bg-primary/15 active:scale-[0.97] transition-[colors,transform]' : ''} ${className}`}
     >
       <div className="flex items-center gap-1.5 mb-2">
         <Icon className={`w-4 h-4 ${iconColor}`} />

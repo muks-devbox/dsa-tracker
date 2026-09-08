@@ -21,7 +21,7 @@ export default function QuestionCards({
     return (
       <div
         key={q.id}
-        className={`border border-border rounded-md p-4 bg-card ${
+        className={`border border-border rounded-md p-4 bg-card animate-row-in ${
           due ? 'bg-primary/5' : q.confidence <= 2 ? 'bg-destructive/5' : ''
         }`}
       >
@@ -75,7 +75,7 @@ export default function QuestionCards({
               celebrateRevision(e);
               onMarkRevised(q);
             }}
-            className="mt-3 w-full flex items-center justify-center gap-1.5 bg-primary text-primary-foreground text-sm font-medium py-2 rounded-md hover:opacity-90 transition-opacity"
+            className="mt-3 w-full flex items-center justify-center gap-1.5 bg-primary text-primary-foreground text-sm font-medium py-2 rounded-md hover:opacity-90 active:scale-[0.97] transition-all"
           >
             <CheckCircle2 className="w-4 h-4" />
             Mark as Revised
@@ -133,7 +133,14 @@ export default function QuestionCards({
                     )}
                   </button>
                 </div>
-                {!collapsed && <div className="space-y-3">{group.items.map(renderCard)}</div>}
+                <div
+                  className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+                  style={{ gridTemplateRows: collapsed ? '0fr' : '1fr' }}
+                >
+                  <div className="overflow-hidden">
+                    <div className="space-y-3">{group.items.map(renderCard)}</div>
+                  </div>
+                </div>
               </div>
             );
           })

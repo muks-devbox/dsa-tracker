@@ -20,7 +20,7 @@ export default function SearchFilter({ search, setSearch, filters, setFilters })
         </div>
         <button
           onClick={() => setFilterOpen((o) => !o)}
-          className="flex items-center gap-1.5 border border-border bg-card px-4 py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] transition-colors"
+          className="flex items-center gap-1.5 border border-border bg-card px-4 py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] active:scale-[0.98] transition-all"
         >
           Filter
           <ChevronDown

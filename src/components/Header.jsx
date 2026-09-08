@@ -25,7 +25,7 @@ export default function Header({ onAdd, onExport, exportDisabled }) {
         </button>
         <button
           onClick={onAdd}
-          className="flex items-center gap-2 bg-primary text-primary-foreground px-3 sm:px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 bg-primary text-primary-foreground px-3 sm:px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 active:scale-[0.97] transition-all"
         >
           <Plus className="w-4 h-4" />
           <span className="hidden sm:inline">Add Entry</span>
@@ -33,7 +33,7 @@ export default function Header({ onAdd, onExport, exportDisabled }) {
         <button
           onClick={signOut}
           title="Sign out"
-          className="flex items-center gap-2 border border-border bg-card p-2 rounded-md text-sm hover:bg-black/[0.02] transition-colors"
+          className="flex items-center gap-2 border border-border bg-card p-2 rounded-md text-sm hover:bg-black/[0.02] active:scale-[0.98] transition-all"
         >
           <LogOut className="w-4 h-4" />
         </button>
