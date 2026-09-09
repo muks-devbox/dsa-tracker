@@ -17,6 +17,14 @@ const emptyForm = {
   mistakeNotes: '',
 };
 
+const CONFIDENCE_ACCENT = {
+  1: { text: 'text-destructive', bg: 'bg-destructive/10', border: 'border-destructive' },
+  2: { text: 'text-destructive', bg: 'bg-destructive/10', border: 'border-destructive' },
+  3: { text: 'text-amber-600', bg: 'bg-amber-500/10', border: 'border-amber-500' },
+  4: { text: 'text-emerald-600', bg: 'bg-emerald-500/10', border: 'border-emerald-500' },
+  5: { text: 'text-emerald-600', bg: 'bg-emerald-500/10', border: 'border-emerald-500' },
+};
+
 export default function QuestionDrawer({ open, onClose, onSave, editingQuestion }) {
   const [form, setForm] = useState(emptyForm);
   const [customTag, setCustomTag] = useState('');
@@ -67,40 +75,48 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
     onSave({ ...form, confidence: Number(form.confidence) });
   }
 
+  const customTags = form.tags.filter((t) => !PRESET_TAGS.includes(t));
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/30 animate-backdrop-in" onClick={onClose} />
-      <div className="relative w-full max-w-2xl max-h-[88vh] bg-card rounded-md overflow-y-auto p-8 shadow-xl animate-modal-in">
-        <div className="flex justify-between items-center mb-6">
+      <div className="relative w-full max-w-2xl max-h-[88vh] bg-card rounded-md shadow-xl animate-modal-in flex flex-col">
+        {/* Sticky header */}
+        <div className="shrink-0 flex justify-between items-center px-8 py-5 border-b border-border">
           <h2 className="font-display text-xl font-bold text-primary tracking-tight">
             {editingQuestion ? 'Edit Entry' : 'New Entry'}
           </h2>
-          <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
+          <button
+            onClick={onClose}
+            className="text-muted-foreground hover:text-foreground hover:scale-110 active:scale-95 transition-transform"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="space-y-5">
-          <Field label="Problem Name">
-            <input
-              type="text"
-              value={form.name}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-              className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-            />
-          </Field>
+        {/* Scrollable body */}
+        <div className="flex-1 overflow-y-auto px-8 py-5 space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Field label="Problem Name">
+              <input
+                type="text"
+                value={form.name}
+                onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+            </Field>
+            <Field label="Problem Link (optional)">
+              <input
+                type="url"
+                placeholder="https://leetcode.com/problems/..."
+                value={form.problemLink}
+                onChange={(e) => setForm((f) => ({ ...f, problemLink: e.target.value }))}
+                className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+            </Field>
+          </div>
 
-          <Field label="Problem Link (optional)">
-            <input
-              type="url"
-              placeholder="https://leetcode.com/problems/..."
-              value={form.problemLink}
-              onChange={(e) => setForm((f) => ({ ...f, problemLink: e.target.value }))}
-              className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/40"
-            />
-          </Field>
-
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Platform">
               <select
                 value={form.platform}
@@ -112,32 +128,51 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
                 ))}
               </select>
             </Field>
-            <Field label="Confidence">
-              <select
-                value={form.confidence}
-                onChange={(e) => setForm((f) => ({ ...f, confidence: e.target.value }))}
+            <Field label="Last Revised">
+              <input
+                type="date"
+                value={form.lastRevised}
+                onChange={(e) => setForm((f) => ({ ...f, lastRevised: e.target.value }))}
                 className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-              >
-                {[1, 2, 3, 4, 5].map((n) => (
-                  <option key={n} value={n}>
-                    Lv {n} — {CONFIDENCE_LABELS[n]}
-                  </option>
-                ))}
-              </select>
+              />
             </Field>
           </div>
 
+          <Field label="Confidence">
+            <div className="grid grid-cols-5 gap-2">
+              {[1, 2, 3, 4, 5].map((n) => {
+                const accent = CONFIDENCE_ACCENT[n];
+                const selected = Number(form.confidence) === n;
+                return (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => setForm((f) => ({ ...f, confidence: n }))}
+                    className={`flex flex-col items-center justify-center gap-0.5 rounded-md border py-2.5 transition-all active:scale-95 ${
+                      selected
+                        ? `${accent.bg} ${accent.border} ${accent.text}`
+                        : 'border-border text-muted-foreground hover:bg-black/[0.02]'
+                    }`}
+                  >
+                    <span className="font-mono font-bold text-base leading-none">{n}</span>
+                    <span className="text-[10px] leading-none">{CONFIDENCE_LABELS[n]}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </Field>
+
           <Field label="Topics / Tags">
-            <div className="grid grid-cols-4 gap-1.5 mb-3">
+            <div className="flex flex-wrap gap-1.5 mb-3">
               {PRESET_TAGS.map((tag) => (
                 <button
                   key={tag}
                   type="button"
                   onClick={() => toggleTag(tag)}
-                  className={`text-xs px-2 py-1.5 rounded-md border transition-colors ${
+                  className={`text-xs px-3 py-1.5 rounded-full border transition-colors active:scale-95 ${
                     form.tags.includes(tag)
                       ? 'bg-primary/15 border-primary text-primary font-medium'
-                      : 'border-border hover:bg-black/[0.02]'
+                      : 'border-border text-muted-foreground hover:bg-black/[0.02] hover:text-foreground'
                   }`}
                 >
                   {tag}
@@ -145,13 +180,10 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
               ))}
             </div>
             <div className="bg-primary/5 border border-primary/20 border-dashed rounded-md p-3">
-              <div className="text-[11px] uppercase tracking-wide text-muted-foreground mb-2">
-                Add custom topic
-              </div>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
                 <input
                   type="text"
-                  placeholder="e.g. Monotonic Stack"
+                  placeholder="Add a custom topic..."
                   value={customTag}
                   onChange={(e) => setCustomTag(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addCustomTag())}
@@ -160,24 +192,24 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
                 <button
                   type="button"
                   onClick={addCustomTag}
-                  className="bg-primary text-primary-foreground px-3 rounded-md hover:opacity-90 active:scale-[0.97] transition-transform"
+                  className="bg-primary text-primary-foreground p-1.5 rounded-md hover:opacity-90 active:scale-[0.97] transition-transform shrink-0"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
               </div>
-              {form.tags.filter((t) => !PRESET_TAGS.includes(t)).length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {form.tags
-                    .filter((t) => !PRESET_TAGS.includes(t))
-                    .map((t) => (
-                      <span
-                        key={t}
-                        onClick={() => toggleTag(t)}
-                        className="bg-primary/15 text-primary text-xs px-2 py-0.5 rounded-md cursor-pointer"
-                      >
-                        {t} ✕
-                      </span>
-                    ))}
+              {customTags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-2.5">
+                  {customTags.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => toggleTag(t)}
+                      className="flex items-center gap-1 bg-primary/15 text-primary text-xs px-2.5 py-1 rounded-full hover:bg-primary/25 transition-colors"
+                    >
+                      {t}
+                      <X className="w-3 h-3" />
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
@@ -190,25 +222,15 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
             placeholder="Click to write a short summary of what the problem asks — 4-5 lines is plenty..."
           />
 
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Time Complexity">
-              <input
-                type="text"
-                placeholder="e.g. O(n log n)"
-                value={form.timeComplexity}
-                onChange={(e) => setForm((f) => ({ ...f, timeComplexity: e.target.value }))}
-                className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/40"
-              />
-            </Field>
-            <Field label="Last Revised">
-              <input
-                type="date"
-                value={form.lastRevised}
-                onChange={(e) => setForm((f) => ({ ...f, lastRevised: e.target.value }))}
-                className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-              />
-            </Field>
-          </div>
+          <Field label="Time Complexity">
+            <input
+              type="text"
+              placeholder="e.g. O(n log n)"
+              value={form.timeComplexity}
+              onChange={(e) => setForm((f) => ({ ...f, timeComplexity: e.target.value }))}
+              className="w-full sm:w-1/2 bg-background border border-border rounded-md px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/40"
+            />
+          </Field>
 
           <MarkdownEditorField
             label="Approach / Logic"
@@ -224,21 +246,22 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
             placeholder="Click to note what went wrong..."
             destructive
           />
+        </div>
 
-          <div className="flex gap-3 pt-2">
-            <button
-              onClick={onClose}
-              className="flex-1 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] active:scale-[0.98] transition-all"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              className="flex-1 bg-primary text-primary-foreground py-2.5 rounded-md text-sm font-medium hover:opacity-90 active:scale-[0.97] transition-all"
-            >
-              Save Record
-            </button>
-          </div>
+        {/* Sticky footer */}
+        <div className="shrink-0 flex gap-3 px-8 py-5 border-t border-border">
+          <button
+            onClick={onClose}
+            className="flex-1 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] active:scale-[0.98] transition-all"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            className="flex-1 bg-primary text-primary-foreground py-2.5 rounded-md text-sm font-medium hover:opacity-90 active:scale-[0.97] transition-all"
+          >
+            Save Record
+          </button>
         </div>
       </div>
     </div>
