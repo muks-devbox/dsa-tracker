@@ -68,9 +68,9 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/30 animate-backdrop-in" onClick={onClose} />
-      <div className="relative w-full max-w-md bg-card h-full overflow-y-auto p-6 shadow-xl animate-drawer-in">
+      <div className="relative w-full max-w-2xl max-h-[88vh] bg-card rounded-md overflow-y-auto p-8 shadow-xl animate-modal-in">
         <div className="flex justify-between items-center mb-6">
           <h2 className="font-display text-xl font-bold text-primary tracking-tight">
             {editingQuestion ? 'Edit Entry' : 'New Entry'}
@@ -128,7 +128,7 @@ export default function QuestionDrawer({ open, onClose, onSave, editingQuestion 
           </div>
 
           <Field label="Topics / Tags">
-            <div className="grid grid-cols-3 gap-1.5 mb-3">
+            <div className="grid grid-cols-4 gap-1.5 mb-3">
               {PRESET_TAGS.map((tag) => (
                 <button
                   key={tag}
