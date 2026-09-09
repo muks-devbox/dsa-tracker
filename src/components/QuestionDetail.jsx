@@ -12,82 +12,89 @@ export default function QuestionDetail({ open, question, onClose, onEdit, onMark
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40 animate-backdrop-in" onClick={onClose} />
-      <div className="relative bg-card border border-border rounded-md w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-xl p-8 animate-modal-in">
-        <button
-          onClick={onClose}
-          className="absolute top-5 right-5 text-muted-foreground hover:text-foreground"
-        >
-          <X className="w-5 h-5" />
-        </button>
+      <div className="relative bg-card border border-border rounded-md w-full max-w-2xl max-h-[90vh] shadow-xl animate-modal-in flex flex-col">
+        {/* Sticky header */}
+        <div className="shrink-0 px-8 pt-6 pb-4 border-b border-border">
+          <button
+            onClick={onClose}
+            className="absolute top-5 right-5 text-muted-foreground hover:text-foreground hover:scale-110 active:scale-95 transition-transform"
+          >
+            <X className="w-5 h-5" />
+          </button>
 
-        <h2 className="font-display text-2xl font-extrabold text-primary tracking-tight pr-8">
-          {question.name}
-        </h2>
-        <div className="flex items-center flex-wrap gap-x-3 gap-y-1.5 mt-1.5">
-          <p className="font-mono text-sm text-muted-foreground">
-            {question.platform} • Level {question.confidence} —{' '}
-            <span className={confidenceColorClass(question.confidence)}>
-              {CONFIDENCE_LABELS[question.confidence]}
-            </span>
-          </p>
-          {question.problemLink && (
-            <a
-              href={question.problemLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-            >
-              View Problem <ExternalLink className="w-3 h-3" />
-            </a>
+          <h2 className="font-display text-2xl font-extrabold text-primary tracking-tight pr-8">
+            {question.name}
+          </h2>
+          <div className="flex items-center flex-wrap gap-x-3 gap-y-1.5 mt-1.5">
+            <p className="font-mono text-sm text-muted-foreground">
+              {question.platform} • Level {question.confidence} —{' '}
+              <span className={confidenceColorClass(question.confidence)}>
+                {CONFIDENCE_LABELS[question.confidence]}
+              </span>
+            </p>
+            {question.problemLink && (
+              <a
+                href={question.problemLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+              >
+                View Problem <ExternalLink className="w-3 h-3" />
+              </a>
+            )}
+          </div>
+
+          {(question.tags || []).length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {question.tags.map((t) => (
+                <span key={t} className="border border-border px-2 py-0.5 rounded-md text-xs">
+                  {t}
+                </span>
+              ))}
+            </div>
           )}
         </div>
 
-        {(question.tags || []).length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-4">
-            {question.tags.map((t) => (
-              <span key={t} className="border border-border px-2 py-0.5 rounded-md text-xs">
-                {t}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {question.gist && (
-          <div className="mt-4 bg-primary/5 border border-primary/20 rounded-md p-3">
-            <div className="text-[11px] uppercase tracking-wide text-primary/80 mb-1.5 font-medium">
-              What's the problem asking?
+        {/* Scrollable body */}
+        <div className="flex-1 overflow-y-auto px-8 py-5 space-y-5">
+          {question.gist && (
+            <div className="bg-primary/5 border border-primary/20 rounded-md p-3">
+              <div className="text-[11px] uppercase tracking-wide text-primary/80 mb-1.5 font-medium">
+                What's the problem asking?
+              </div>
+              <div
+                className="md-content text-sm"
+                dangerouslySetInnerHTML={{ __html: renderMarkdownLite(question.gist) }}
+              />
             </div>
-            <div
-              className="md-content text-sm"
-              dangerouslySetInnerHTML={{ __html: renderMarkdownLite(question.gist) }}
-            />
-          </div>
-        )}
+          )}
 
-        <div className="flex flex-wrap gap-x-8 gap-y-3 mt-5 pb-5 border-b border-border">
-          <InfoBlock label="Last Revised">
-            <span className="font-mono text-sm">{question.lastRevised}</span>
-          </InfoBlock>
-          <InfoBlock label="Next Revision">
-            <span className={`font-mono text-sm ${due ? 'text-primary font-bold' : ''}`}>
-              {nextDate}
-            </span>
-            {due && (
-              <span className="ml-2 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-md animate-pulse">
-                DUE
+          <div className="flex flex-wrap gap-x-8 gap-y-3 pb-5 border-b border-border">
+            <InfoBlock label="Last Revised">
+              <span className="font-mono text-sm">{question.lastRevised}</span>
+            </InfoBlock>
+            <InfoBlock label="Next Revision">
+              <span className={`font-mono text-sm ${due ? 'text-primary font-bold' : ''}`}>
+                {nextDate}
               </span>
-            )}
-          </InfoBlock>
+              {due && (
+                <span className="ml-2 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-md animate-pulse">
+                  DUE
+                </span>
+              )}
+            </InfoBlock>
+          </div>
+
+          <Box label="Time Complexity" mono>
+            {question.timeComplexity || '—'}
+          </Box>
+
+          <Section label="Approach" content={question.approach} />
+          <Section label="Mistakes / Notes" content={question.mistakeNotes} highlight />
         </div>
 
-        <Box label="Time Complexity" mono>
-          {question.timeComplexity || '—'}
-        </Box>
-
-        <Section label="Approach" content={question.approach} />
-        <Section label="Mistakes / Notes" content={question.mistakeNotes} highlight />
-
-        <div className="flex gap-3 mt-2">
+        {/* Sticky footer */}
+        <div className="shrink-0 flex gap-3 px-8 py-5 border-t border-border">
           <button
             onClick={() => onEdit(question)}
             className="flex-1 flex items-center justify-center gap-1.5 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] active:scale-[0.98] transition-all"
@@ -126,7 +133,7 @@ function InfoBlock({ label, children }) {
 
 function Box({ label, children, mono = false }) {
   return (
-    <div className="mt-5">
+    <div>
       <div className="text-[11px] uppercase tracking-wide text-muted-foreground mb-1.5">
         {label}
       </div>
@@ -139,7 +146,7 @@ function Box({ label, children, mono = false }) {
 
 function Section({ label, content, highlight = false }) {
   return (
-    <div className="mt-5">
+    <div>
       <div className="text-[11px] uppercase tracking-wide text-muted-foreground mb-1.5">
         {label}
       </div>

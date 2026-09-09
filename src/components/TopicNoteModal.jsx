@@ -65,24 +65,26 @@ export default function TopicNoteModal({ open, tag, content, problemCount, onClo
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40 animate-backdrop-in" onClick={onClose} />
-      <div className="relative bg-card border border-border rounded-md w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-xl p-8 animate-modal-in">
-        <button
-          onClick={onClose}
-          className="absolute top-5 right-5 text-muted-foreground hover:text-foreground"
-        >
-          <X className="w-5 h-5" />
-        </button>
+      <div className="relative bg-card border border-border rounded-md w-full max-w-2xl max-h-[90vh] shadow-xl animate-modal-in flex flex-col">
+        <div className="shrink-0 px-8 pt-6 pb-4 border-b border-border">
+          <button
+            onClick={onClose}
+            className="absolute top-5 right-5 text-muted-foreground hover:text-foreground hover:scale-110 active:scale-95 transition-transform"
+          >
+            <X className="w-5 h-5" />
+          </button>
 
-        <h2 className="font-display text-2xl font-extrabold text-primary tracking-tight pr-8">
-          {tag}
-        </h2>
-        <p className="font-mono text-sm text-muted-foreground mt-1.5">
-          Pattern Playbook • {problemCount} problem{problemCount !== 1 ? 's' : ''} in this topic
-        </p>
+          <h2 className="font-display text-2xl font-extrabold text-primary tracking-tight pr-8">
+            {tag}
+          </h2>
+          <p className="font-mono text-sm text-muted-foreground mt-1.5">
+            Pattern Playbook • {problemCount} problem{problemCount !== 1 ? 's' : ''} in this topic
+          </p>
+        </div>
 
-        {mode === 'view' ? (
-          <>
-            <div className="mt-5">
+        <div className="flex-1 overflow-y-auto px-8 py-5">
+          {mode === 'view' ? (
+            <>
               {value ? (
                 <div
                   className="md-content text-sm"
@@ -94,54 +96,54 @@ export default function TopicNoteModal({ open, tag, content, problemCount, onClo
                   step-by-step approach you use to solve {tag} problems.
                 </p>
               )}
-            </div>
-            <button
-              onClick={startEdit}
-              className="mt-6 w-full flex items-center justify-center gap-1.5 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] active:scale-[0.98] transition-all"
-            >
-              <Pencil className="w-4 h-4" />
-              {value ? 'Edit Pattern Notes' : 'Add Pattern Notes'}
-            </button>
-          </>
-        ) : (
-          <>
-            <div className="flex items-center gap-1 flex-wrap mt-5 mb-2 border border-border rounded-md px-2 py-1.5 bg-background">
-              <ToolbarButton icon={Heading} title="Heading" onClick={applyHeading} />
-              <ToolbarButton icon={Bold} title="Bold" onClick={applyBold} />
-              <ToolbarButton icon={Italic} title="Italic" onClick={applyItalic} />
-              <ToolbarButton icon={List} title="Bullet list" onClick={applyList} />
-              <ToolbarButton icon={Quote} title="Quote" onClick={applyQuoteFmt} />
-              <ToolbarButton icon={Code} title="Inline code" onClick={applyInlineCode} />
-              <ToolbarButton icon={Terminal} title="Code block" onClick={applyCodeBlock} />
-            </div>
-            <textarea
-              ref={textareaRef}
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              placeholder={`e.g. how to recognize a ${tag} problem, and the usual steps to solve one...`}
-              className="w-full h-[45vh] resize-none border border-border rounded-md px-3 py-3 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/40 bg-background"
-            />
-            {error && (
-              <p className="text-destructive text-xs mt-2">{error}</p>
-            )}
-            <div className="flex gap-3 mt-4">
               <button
-                onClick={handleCancel}
-                disabled={saving}
-                className="flex-1 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] active:scale-[0.98] transition-all disabled:opacity-50"
+                onClick={startEdit}
+                className="mt-6 w-full flex items-center justify-center gap-1.5 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] active:scale-[0.98] transition-all"
               >
-                Cancel
+                <Pencil className="w-4 h-4" />
+                {value ? 'Edit Pattern Notes' : 'Add Pattern Notes'}
               </button>
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="flex-1 bg-primary text-primary-foreground py-2.5 rounded-md text-sm font-medium hover:opacity-90 active:scale-[0.97] transition-all disabled:opacity-60"
-              >
-                {saving ? 'Saving...' : 'Save'}
-              </button>
-            </div>
-          </>
-        )}
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-1 flex-wrap mb-2 border border-border rounded-md px-2 py-1.5 bg-background">
+                <ToolbarButton icon={Heading} title="Heading" onClick={applyHeading} />
+                <ToolbarButton icon={Bold} title="Bold" onClick={applyBold} />
+                <ToolbarButton icon={Italic} title="Italic" onClick={applyItalic} />
+                <ToolbarButton icon={List} title="Bullet list" onClick={applyList} />
+                <ToolbarButton icon={Quote} title="Quote" onClick={applyQuoteFmt} />
+                <ToolbarButton icon={Code} title="Inline code" onClick={applyInlineCode} />
+                <ToolbarButton icon={Terminal} title="Code block" onClick={applyCodeBlock} />
+              </div>
+              <textarea
+                ref={textareaRef}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                placeholder={`e.g. how to recognize a ${tag} problem, and the usual steps to solve one...`}
+                className="w-full h-[45vh] resize-none border border-border rounded-md px-3 py-3 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/40 bg-background"
+              />
+              {error && (
+                <p className="text-destructive text-xs mt-2">{error}</p>
+              )}
+              <div className="flex gap-3 mt-4">
+                <button
+                  onClick={handleCancel}
+                  disabled={saving}
+                  className="flex-1 border border-border py-2.5 rounded-md text-sm font-medium hover:bg-black/[0.02] active:scale-[0.98] transition-all disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="flex-1 bg-primary text-primary-foreground py-2.5 rounded-md text-sm font-medium hover:opacity-90 active:scale-[0.97] transition-all disabled:opacity-60"
+                >
+                  {saving ? 'Saving...' : 'Save'}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
