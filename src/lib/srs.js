@@ -4,7 +4,7 @@ export const OFFSET_DAYS = {
   2: 3,
   3: 5,
   4: 7,
-  5: 10,
+  5: 21,
 };
 
 export const CONFIDENCE_LABELS = {
