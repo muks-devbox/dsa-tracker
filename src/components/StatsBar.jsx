@@ -58,17 +58,17 @@ function StatCard({ icon: Icon, label, value, iconColor, className = '', valueCl
       onClick={onClick}
       title={clickable ? 'Jump to due topics' : undefined}
       style={{ animationDelay: `${delay}ms` }}
-      className={`border border-border rounded-md p-4 animate-stat-in ${
-        highlight ? 'bg-primary/10 border-primary/20' : 'bg-card'
-      } ${clickable ? 'cursor-pointer hover:border-primary/40 hover:bg-primary/15 active:scale-[0.97] transition-[colors,transform]' : ''} ${className}`}
+      className={`group border border-border rounded-md p-4 animate-stat-in hover:-translate-y-1 hover:shadow-md transition-all duration-200 ${
+        highlight ? 'bg-primary/10 border-primary/20' : 'bg-card hover:border-primary/30'
+      } ${clickable ? 'cursor-pointer hover:border-primary/50 hover:bg-primary/15 hover:shadow-lg active:scale-[0.97] active:translate-y-0' : ''} ${className}`}
     >
       <div className="flex items-center gap-1.5 mb-2">
-        <Icon className={`w-4 h-4 ${iconColor}`} />
+        <Icon className={`w-4 h-4 transition-transform duration-200 group-hover:scale-125 ${iconColor}`} />
         <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
           {label}
         </span>
       </div>
-      <div className={`font-mono font-bold text-3xl ${highlight ? 'text-primary' : ''} ${valueClassName}`}>
+      <div className={`font-mono font-bold text-3xl transition-transform duration-200 group-hover:scale-105 origin-left ${highlight ? 'text-primary' : ''} ${valueClassName}`}>
         {value}
       </div>
     </div>

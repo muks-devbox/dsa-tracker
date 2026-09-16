@@ -141,10 +141,10 @@ export default function QuestionTable({
                           <button
                             onClick={() => onOpenNote(group.tag)}
                             title={notesByTag?.[group.tag] ? 'View pattern notes' : 'Add pattern notes'}
-                            className={`flex items-center justify-center p-1.5 rounded-md border transition-colors shrink-0 ${
+                            className={`flex items-center justify-center p-1.5 rounded-md border hover:scale-110 active:scale-95 transition-all shrink-0 ${
                               notesByTag?.[group.tag]
                                 ? 'border-primary/40 bg-primary/10 text-primary hover:bg-primary/20'
-                                : 'border-border text-muted-foreground hover:bg-black/[0.03]'
+                                : 'border-border text-muted-foreground hover:bg-black/[0.03] hover:text-primary hover:border-primary/40'
                             }`}
                           >
                             {notesByTag?.[group.tag] ? (

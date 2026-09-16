@@ -15,7 +15,7 @@ export default function SearchFilter({ search, setSearch, filters, setFilters })
             placeholder="Search problem..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-card border border-border rounded-md pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+            className="w-full bg-card border border-border rounded-md pl-10 pr-3 py-2.5 text-sm hover:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-colors"
           />
         </div>
         <button

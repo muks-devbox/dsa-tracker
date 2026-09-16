@@ -200,17 +200,17 @@ export default function App() {
               <button
                 onClick={expandAll}
                 title="Expand all topics"
-                className="flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium bg-card hover:bg-black/[0.02] transition-colors"
+                className="group flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium bg-card hover:bg-primary/10 hover:text-primary active:scale-95 transition-all"
               >
-                <ChevronsUpDown className="w-3.5 h-3.5" />
+                <ChevronsUpDown className="w-3.5 h-3.5 transition-transform group-hover:scale-125" />
                 <span className="hidden sm:inline">Expand All</span>
               </button>
               <button
                 onClick={collapseAll}
                 title="Collapse all topics"
-                className="flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium bg-card hover:bg-black/[0.02] transition-colors border-l border-border"
+                className="group flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium bg-card hover:bg-primary/10 hover:text-primary active:scale-95 transition-all border-l border-border"
               >
-                <ChevronsDownUp className="w-3.5 h-3.5" />
+                <ChevronsDownUp className="w-3.5 h-3.5 transition-transform group-hover:scale-125" />
                 <span className="hidden sm:inline">Collapse All</span>
               </button>
             </div>
@@ -218,8 +218,8 @@ export default function App() {
           <div className="flex border border-border rounded-md overflow-hidden mb-4">
             <button
               onClick={() => setViewMode('topic')}
-              className={`flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium transition-colors ${
-                viewMode === 'topic' ? 'bg-primary text-primary-foreground' : 'bg-card hover:bg-black/[0.02]'
+              className={`flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium active:scale-95 transition-all ${
+                viewMode === 'topic' ? 'bg-primary text-primary-foreground' : 'bg-card hover:bg-primary/10 hover:text-primary'
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
@@ -227,8 +227,8 @@ export default function App() {
             </button>
             <button
               onClick={() => setViewMode('recent')}
-              className={`flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium transition-colors border-l border-border ${
-                viewMode === 'recent' ? 'bg-primary text-primary-foreground' : 'bg-card hover:bg-black/[0.02]'
+              className={`flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium active:scale-95 transition-all border-l border-border ${
+                viewMode === 'recent' ? 'bg-primary text-primary-foreground' : 'bg-card hover:bg-primary/10 hover:text-primary'
               }`}
             >
               <Clock className="w-3.5 h-3.5" />
