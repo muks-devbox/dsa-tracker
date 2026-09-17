@@ -78,14 +78,14 @@ export default function MarkdownEditorField({ label, value, onChange, placeholde
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/40 animate-backdrop-in" onClick={handleCancel} />
           <div className="relative bg-card border border-border rounded-md w-full max-w-2xl h-[80vh] flex flex-col shadow-xl animate-modal-in">
-            <div className="flex items-center justify-between px-5 py-3 border-b border-border">
+            <div className="shrink-0 flex items-center justify-between px-5 py-3 border-b border-border">
               <h3 className="font-semibold">{label}</h3>
               <button onClick={handleCancel} className="text-muted-foreground hover:text-foreground">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="flex items-center gap-1 px-5 py-2 border-b border-border">
+            <div className="shrink-0 flex items-center gap-1 flex-wrap px-5 py-2 border-b border-border">
               <ToolbarButton icon={Heading} title="Heading" onClick={applyHeading} />
               <ToolbarButton icon={Bold} title="Bold" onClick={applyBold} />
               <ToolbarButton icon={Italic} title="Italic" onClick={applyItalic} />
@@ -103,10 +103,10 @@ export default function MarkdownEditorField({ label, value, onChange, placeholde
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               placeholder={placeholder}
-              className="flex-1 w-full resize-none px-5 py-4 text-sm font-mono focus:outline-none bg-transparent"
+              className="flex-1 min-h-0 w-full resize-none overflow-y-auto px-5 py-4 text-sm font-mono leading-relaxed focus:outline-none bg-transparent"
             />
 
-            <div className="flex gap-3 px-5 py-3 border-t border-border">
+            <div className="shrink-0 flex gap-3 px-5 py-3 border-t border-border">
               <button
                 onClick={handleCancel}
                 className="flex-1 border border-border py-2 rounded-md text-sm font-medium hover:bg-black/[0.02] active:scale-[0.98] transition-all"
